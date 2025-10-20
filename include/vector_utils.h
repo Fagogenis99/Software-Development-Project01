@@ -6,6 +6,7 @@
 #include <string>
 #include <iostream>
 #include <cmath>
+#include <numeric>
 
 namespace vutils{
 
