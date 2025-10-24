@@ -1,10 +1,13 @@
 #include <iostream>
+#include <cmath>
 #include <string>
 #include <stdexcept>
 #include <unordered_map>
 #include <vector>
 #include <cctype>
 #include "../include/dataset_io.hpp"
+#include "../include/ivf_flat.hpp"
+
 
 struct Config {
     // common
@@ -175,8 +178,26 @@ void run_lsh(const Matrix&, const Matrix&, const Config&) {
 void run_hypercube(const Matrix&, const Matrix&, const Config&) {
     std::cout << "Hypercube not implemented yet.\n";
 }
-void run_ivfflat(const Matrix&, const Matrix&, const Config&) {
-    std::cout << "IVFFlat not implemented yet.\n";
+void run_ivfflat(const Matrix& base, const Matrix& queries, const Config& cfg) {
+    // 1) Build IVF index (coarse k-means + inverted lists)
+    int train_subset = (int)std::sqrt((double)base.n);  // good default
+    auto ivf = build_ivf_flat(base, cfg.kclusters, cfg.seed, train_subset);
+    std::cout << "IVF built: k=" << cfg.kclusters
+              << ", avg list size ≈ " << (double)base.n / std::max(1, ivf.centroids.n) << "\n";
+
+    // 2) Quick smoke test: run a few queries (no metrics yet)
+    const int show = std::min(3, queries.n);
+    for (int i = 0; i < show; ++i) {
+        if (!cfg.do_range) {
+            auto ans = ivf_flat_query_topN(ivf, base, queries.row(i), cfg.nprobe, cfg.N);
+            std::cout << "q" << i << " → got " << ans.ids.size()
+                      << " | nn id=" << (ans.ids.empty() ? -1 : ans.ids[0])
+                      << " dist=" << (ans.dists.empty() ? -1.0f : ans.dists[0]) << "\n";
+        } else {
+            auto ids = ivf_flat_query_range(ivf, base, queries.row(i), cfg.nprobe, (float)cfg.R);
+            std::cout << "q" << i << " → " << ids.size() << " ids within R\n";
+        }
+    }
 }
 void run_ivfpq(const Matrix&, const Matrix&, const Config&) {
     std::cout << "IVFPQ not implemented yet.\n";
