@@ -69,7 +69,7 @@ namespace cube {
             std::unordered_map<std::string, std::vector<unsigned>> cube_;
 
             //stored dataset
-            std::vector<std::vector<float>> dataset;
+            std::vector<std::vector<float>> stored_dataset;
 
             //computing k-bit vertex for point p (g(p))
             std::string hashToVertex(const std::vector<float>& p) const;
