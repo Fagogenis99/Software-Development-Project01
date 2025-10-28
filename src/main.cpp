@@ -5,8 +5,11 @@
 #include <unordered_map>
 #include <vector>
 #include <cctype>
+#include <algorithm>
+
 #include "../include/dataset_io.hpp"
 #include "../include/ivf_flat.hpp"
+#include "../include/lsh.h"
 
 
 struct Config {
@@ -171,9 +174,49 @@ int main(int argc, char** argv) {
     }
 }
 
-// --- dummy implementations just to compile now; replace with real ones -----
-void run_lsh(const Matrix&, const Matrix&, const Config&) {
-    std::cout << "LSH not implemented yet.\n";
+static std::vector<std::vector<float>> to2D(const Matrix& M) {
+    std::vector<std::vector<float>> V;
+    V.reserve(M.n);
+    for (int i = 0; i < M.n; ++i) {
+        const float* r = M.row(i);
+        V.emplace_back(r, r + M.d);
+    }
+    return V;
+}
+
+
+void run_lsh(const Matrix& base, const Matrix& queries, const Config& cfg) {
+    // Convert Matrix -> vector<vector<float>> for your friend's LSH
+    auto base2D    = to2D(base);
+    auto queries2D = to2D(queries);
+
+    // If your LSH uses table size, a simple heuristic is n/8 (min 1)
+    int tableSize = std::max(1, base.n / 8);
+
+    // Build index
+    lsh::LSH index(/*dim*/base.d, /*k*/cfg.k, /*L*/cfg.L,
+                   /*w*/cfg.w, /*tableSize*/tableSize, /*seed*/(unsigned)cfg.seed);
+    index.buildIndex(base2D);
+
+    // Quick smoke test (print a few queries); later, iterate all & write metrics/file
+    const int show = std::min(3, queries.n);
+    if (!cfg.do_range) {
+        for (int i = 0; i < show; ++i) {
+            auto ans = index.searchKNN(queries2D[i], cfg.N);
+            if (!ans.empty()) {
+                std::cout << "q" << i << " → top" << cfg.N
+                          << " id="   << ans[0].first
+                          << " dist=" << ans[0].second << "\n";
+            } else {
+                std::cout << "q" << i << " → no candidates\n";
+            }
+        }
+    } else {
+        for (int i = 0; i < show; ++i) {
+            auto ids = index.searchRadius(queries2D[i], cfg.R);
+            std::cout << "q" << i << " → " << ids.size() << " ids within R\n";
+        }
+    }
 }
 void run_hypercube(const Matrix&, const Matrix&, const Config&) {
     std::cout << "Hypercube not implemented yet.\n";

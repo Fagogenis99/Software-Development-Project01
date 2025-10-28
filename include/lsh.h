@@ -8,6 +8,8 @@
 #include <utility>
 #include <cstdint>
 #include "vector_utils.h"
+#include "vutils.hpp"
+
 
 //Locality Sensitive Hashing for approximate nearest neighbor search with L2 distance(Euclidean distance)
 //implements h-and g- functions as described based on random projections and uniform offsets
