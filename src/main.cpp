@@ -10,6 +10,7 @@
 #include "../include/dataset_io.hpp"
 #include "../include/ivf_flat.hpp"
 #include "../include/lsh.h"
+#include "../include/ivf_pq.hpp"
 
 
 struct Config {
@@ -242,6 +243,23 @@ void run_ivfflat(const Matrix& base, const Matrix& queries, const Config& cfg) {
         }
     }
 }
-void run_ivfpq(const Matrix&, const Matrix&, const Config&) {
-    std::cout << "IVFPQ not implemented yet.\n";
+void run_ivfpq(const Matrix& base, const Matrix& queries, const Config& cfg) {
+    int train_subset = (int)std::sqrt((double)base.n);  // optional
+    auto ivf = build_ivf_pq(base, cfg.kclusters, cfg.M_pq, cfg.nbits, cfg.seed, train_subset);
+    std::cout << "IVFPQ built: k=" << cfg.kclusters
+              << ", M=" << ivf.pq.M << ", nbits=" << ivf.pq.nbits
+              << ", dsub=" << ivf.pq.dsub << "\n";
+
+    const int show = std::min(3, queries.n);
+    for (int i = 0; i < show; ++i) {
+        if (!cfg.do_range) {
+            auto ans = ivf_pq_query_topN(ivf, base, queries.row(i), cfg.nprobe, cfg.N);
+            std::cout << "q" << i << " → got " << ans.ids.size()
+                      << " | nn id=" << (ans.ids.empty()? -1 : ans.ids[0])
+                      << " dist≈"   << (ans.dists.empty()? -1.0f : ans.dists[0]) << "\n";
+        } else {
+            auto ids = ivf_pq_query_range(ivf, base, queries.row(i), cfg.nprobe, (float)cfg.R);
+            std::cout << "q" << i << " → " << ids.size() << " approx ids within R\n";
+        }
+    }
 }
