@@ -1,0 +1,136 @@
+=== IVFFLAT EXPERIMENT RESULTS ===
+-------------------------------------------------
+[IVFFlat] Building index...
+IVF built: k=20, avg list size ≈ 3000
+q0 NN: id=53843 dApprox=676.584 dTrue=676.584 AF=1 Recall=1 tApprox=6.586ms tTrue=51.835ms
+q1 NN: id=28882 dApprox=1162.93 dTrue=1162.93 AF=1 Recall=1 tApprox=5.192ms tTrue=54.761ms
+q2 NN: id=58741 dApprox=321.663 dTrue=321.663 AF=1 Recall=1 tApprox=8.018ms tTrue=48.585ms
+q3 NN: id=29044 dApprox=1221.58 dTrue=1221.58 AF=1 Recall=1 tApprox=3.577ms tTrue=47.222ms
+q4 NN: id=52920 dApprox=1092.53 dTrue=1092.53 AF=1 Recall=1 tApprox=5.222ms tTrue=45.563ms
+
+[IVFFlat Summary]
+  Average AF: 1
+  Recall@N: 1
+  QPS: 174.856
+  tApproximateAverage: 5.719
+  tTrueAverage: 49.5932
+-------------------------------------------------
+[IVFFlat] Building index...
+IVF built: k=20, avg list size ≈ 3000
+q0 NN: id=53843 dApprox=676.584 dTrue=676.584 AF=1 Recall=1 tApprox=32.671ms tTrue=45.199ms
+q1 NN: id=28882 dApprox=1162.93 dTrue=1162.93 AF=1 Recall=1 tApprox=27.535ms tTrue=44.978ms
+q2 NN: id=58741 dApprox=321.663 dTrue=321.663 AF=1 Recall=1 tApprox=37.148ms tTrue=45.28ms
+q3 NN: id=29044 dApprox=1221.58 dTrue=1221.58 AF=1 Recall=1 tApprox=15.133ms tTrue=42.343ms
+q4 NN: id=52920 dApprox=1092.53 dTrue=1092.53 AF=1 Recall=1 tApprox=29.795ms tTrue=42.789ms
+
+[IVFFlat Summary]
+  Average AF: 1
+  Recall@N: 1
+  QPS: 35.1415
+  tApproximateAverage: 28.4564
+  tTrueAverage: 44.1178
+-------------------------------------------------
+[IVFFlat] Building index...
+IVF built: k=20, avg list size ≈ 3000
+q0 NN: id=53843 dApprox=676.584 dTrue=676.584 AF=1 Recall=1 tApprox=59.782ms tTrue=46.878ms
+q1 NN: id=28882 dApprox=1162.93 dTrue=1162.93 AF=1 Recall=1 tApprox=50.745ms tTrue=42.993ms
+q2 NN: id=58741 dApprox=321.663 dTrue=321.663 AF=1 Recall=1 tApprox=64.598ms tTrue=42.23ms
+q3 NN: id=29044 dApprox=1221.58 dTrue=1221.58 AF=1 Recall=1 tApprox=40.127ms tTrue=43.913ms
+q4 NN: id=52920 dApprox=1092.53 dTrue=1092.53 AF=1 Recall=1 tApprox=57.586ms tTrue=44.003ms
+
+[IVFFlat Summary]
+  Average AF: 1
+  Recall@N: 1
+  QPS: 18.3259
+  tApproximateAverage: 54.5676
+  tTrueAverage: 44.0034
+-------------------------------------------------
+[IVFFlat] Building index...
+IVF built: k=50, avg list size ≈ 1200
+q0 NN: id=53843 dApprox=676.584 dTrue=676.584 AF=1 Recall=1 tApprox=3.968ms tTrue=49.054ms
+q1 NN: id=28882 dApprox=1162.93 dTrue=1162.93 AF=1 Recall=1 tApprox=5.704ms tTrue=45.673ms
+q2 NN: id=58741 dApprox=321.663 dTrue=321.663 AF=1 Recall=1 tApprox=5.404ms tTrue=42.902ms
+q3 NN: id=29044 dApprox=1221.58 dTrue=1221.58 AF=1 Recall=1 tApprox=2.623ms tTrue=42.853ms
+q4 NN: id=52920 dApprox=1092.53 dTrue=1092.53 AF=1 Recall=1 tApprox=3.183ms tTrue=42.455ms
+
+[IVFFlat Summary]
+  Average AF: 1
+  Recall@N: 1
+  QPS: 239.441
+  tApproximateAverage: 4.1764
+  tTrueAverage: 44.5874
+-------------------------------------------------
+[IVFFlat] Building index...
+IVF built: k=50, avg list size ≈ 1200
+q0 NN: id=53843 dApprox=676.584 dTrue=676.584 AF=1 Recall=1 tApprox=11.545ms tTrue=48.687ms
+q1 NN: id=28882 dApprox=1162.93 dTrue=1162.93 AF=1 Recall=1 tApprox=10.188ms tTrue=52.492ms
+q2 NN: id=58741 dApprox=321.663 dTrue=321.663 AF=1 Recall=1 tApprox=18.862ms tTrue=52.818ms
+q3 NN: id=29044 dApprox=1221.58 dTrue=1221.58 AF=1 Recall=1 tApprox=16.209ms tTrue=61.094ms
+q4 NN: id=52920 dApprox=1092.53 dTrue=1092.53 AF=1 Recall=1 tApprox=9.806ms tTrue=50.872ms
+
+[IVFFlat Summary]
+  Average AF: 1
+  Recall@N: 1
+  QPS: 75.0638
+  tApproximateAverage: 13.322
+  tTrueAverage: 53.1926
+-------------------------------------------------
+[IVFFlat] Building index...
+IVF built: k=50, avg list size ≈ 1200
+q0 NN: id=53843 dApprox=676.584 dTrue=676.584 AF=1 Recall=1 tApprox=25.375ms tTrue=47.432ms
+q1 NN: id=28882 dApprox=1162.93 dTrue=1162.93 AF=1 Recall=1 tApprox=23.708ms tTrue=46.023ms
+q2 NN: id=58741 dApprox=321.663 dTrue=321.663 AF=1 Recall=1 tApprox=27.945ms tTrue=43.336ms
+q3 NN: id=29044 dApprox=1221.58 dTrue=1221.58 AF=1 Recall=1 tApprox=23.499ms tTrue=45.199ms
+q4 NN: id=52920 dApprox=1092.53 dTrue=1092.53 AF=1 Recall=1 tApprox=26.276ms tTrue=48.139ms
+
+[IVFFlat Summary]
+  Average AF: 1
+  Recall@N: 1
+  QPS: 39.4312
+  tApproximateAverage: 25.3606
+  tTrueAverage: 46.0258
+-------------------------------------------------
+[IVFFlat] Building index...
+IVF built: k=100, avg list size ≈ 600
+q0 NN: id=53843 dApprox=676.584 dTrue=676.584 AF=1 Recall=1 tApprox=2.156ms tTrue=44.962ms
+q1 NN: id=28882 dApprox=1162.93 dTrue=1162.93 AF=1 Recall=1 tApprox=2.037ms tTrue=44.435ms
+q2 NN: id=58741 dApprox=321.663 dTrue=321.663 AF=1 Recall=1 tApprox=1.882ms tTrue=42.086ms
+q3 NN: id=29044 dApprox=1221.58 dTrue=1221.58 AF=1 Recall=1 tApprox=1.954ms tTrue=42.057ms
+q4 NN: id=52920 dApprox=1092.53 dTrue=1092.53 AF=1 Recall=1 tApprox=2.487ms tTrue=41.949ms
+
+[IVFFlat Summary]
+  Average AF: 1
+  Recall@N: 1
+  QPS: 475.466
+  tApproximateAverage: 2.1032
+  tTrueAverage: 43.0978
+-------------------------------------------------
+[IVFFlat] Building index...
+IVF built: k=100, avg list size ≈ 600
+q0 NN: id=53843 dApprox=676.584 dTrue=676.584 AF=1 Recall=1 tApprox=7.68ms tTrue=45.924ms
+q1 NN: id=28882 dApprox=1162.93 dTrue=1162.93 AF=1 Recall=1 tApprox=10.45ms tTrue=45.371ms
+q2 NN: id=58741 dApprox=321.663 dTrue=321.663 AF=1 Recall=1 tApprox=9.099ms tTrue=43.369ms
+q3 NN: id=29044 dApprox=1221.58 dTrue=1221.58 AF=1 Recall=1 tApprox=5.829ms tTrue=42.701ms
+q4 NN: id=52920 dApprox=1092.53 dTrue=1092.53 AF=1 Recall=1 tApprox=7.753ms tTrue=42.59ms
+
+[IVFFlat Summary]
+  Average AF: 1
+  Recall@N: 1
+  QPS: 122.516
+  tApproximateAverage: 8.1622
+  tTrueAverage: 43.991
+-------------------------------------------------
+[IVFFlat] Building index...
+IVF built: k=100, avg list size ≈ 600
+q0 NN: id=53843 dApprox=676.584 dTrue=676.584 AF=1 Recall=1 tApprox=15.809ms tTrue=47.38ms
+q1 NN: id=28882 dApprox=1162.93 dTrue=1162.93 AF=1 Recall=1 tApprox=18.936ms tTrue=48.383ms
+q2 NN: id=58741 dApprox=321.663 dTrue=321.663 AF=1 Recall=1 tApprox=19.161ms tTrue=43.581ms
+q3 NN: id=29044 dApprox=1221.58 dTrue=1221.58 AF=1 Recall=1 tApprox=12.723ms tTrue=43.687ms
+q4 NN: id=52920 dApprox=1092.53 dTrue=1092.53 AF=1 Recall=1 tApprox=17.364ms tTrue=43.216ms
+
+[IVFFlat Summary]
+  Average AF: 1
+  Recall@N: 1
+  QPS: 59.5288
+  tApproximateAverage: 16.7986
+  tTrueAverage: 45.2494

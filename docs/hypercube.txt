@@ -1,0 +1,47 @@
+🧩 Overview
+
+Our hypercube.cpp file contains:
+
+HFunction constructor and compute:
+    -h_i(p) = floor[(v * p + t_off)/w]
+    -Uses Gaussian for v_i and Uniform[0,w) for t_i 
+    -Uses vutils::dotProduct()
+
+Hypercube constructor:
+    -Initializes all member variables
+    -Seeds random generator once (consistent across program).
+    -Creates k HFunction objects.
+    -Initializes k empty maps for f_i.
+    -Uses initializer list correctly
+
+buildIndex():
+    -Stores dataset by value 
+    -Clears and pre-reserves cube
+    -Inserts each vector index into the corresponding vertex bucket
+    -Uses hashToVertex() correctly
+
+hashToVertex():
+    -Computes each h_i(p) and converts it to a bit using a random but consistent mapping f_i(h_i(p))
+    -Uses per-bit maps (correct theoretical behavior — each bit is independent)
+    -Uses mutable maps correctly (since function is const)
+    -String construction is efficient (bits.resize(k_bits) avoids reallocations)
+
+enumerateProbes():
+    -Produces list of binary strings at increasing Hamming distances
+    -Avoids duplicates using unordered_set
+    -Efficient for small k (e.g. ≤20 typical)
+    -Avoids infinite loops by checking limit
+    -Correctly includes home as first probe
+
+searchKNN():
+    -Correctly collects candidate points (unique via unordered_set)
+    -Limits total examined points to M
+    -Computes Euclidean distances for candidates
+    -Returns top-N sorted by distance
+
+
+searchRadius():
+    -Same candidate logic as searchKNN
+    -Returns indices of points within radius R
+    -Stops after examining M points
+    -No sorting needed

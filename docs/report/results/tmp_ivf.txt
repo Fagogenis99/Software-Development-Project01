@@ -1,0 +1,14 @@
+[IVFFlat] Building index...
+IVF built: k=100, avg list size ≈ 600
+q0 NN: id=53843 dApprox=676.584 dTrue=676.584 AF=1 Recall=1 tApprox=15.809ms tTrue=47.38ms
+q1 NN: id=28882 dApprox=1162.93 dTrue=1162.93 AF=1 Recall=1 tApprox=18.936ms tTrue=48.383ms
+q2 NN: id=58741 dApprox=321.663 dTrue=321.663 AF=1 Recall=1 tApprox=19.161ms tTrue=43.581ms
+q3 NN: id=29044 dApprox=1221.58 dTrue=1221.58 AF=1 Recall=1 tApprox=12.723ms tTrue=43.687ms
+q4 NN: id=52920 dApprox=1092.53 dTrue=1092.53 AF=1 Recall=1 tApprox=17.364ms tTrue=43.216ms
+
+[IVFFlat Summary]
+  Average AF: 1
+  Recall@N: 1
+  QPS: 59.5288
+  tApproximateAverage: 16.7986
+  tTrueAverage: 45.2494

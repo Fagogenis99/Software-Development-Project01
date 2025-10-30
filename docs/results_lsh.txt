@@ -1,0 +1,26 @@
+LSH
+Query: 0
+Nearest neighbor-1: 53843
+distanceApproximate: 676.584
+distanceTrue: 676.584
+Query: 1
+Nearest neighbor-1: 28882
+distanceApproximate: 1162.93
+distanceTrue: 1162.93
+Query: 2
+Nearest neighbor-1: 58741
+distanceApproximate: 321.663
+distanceTrue: 321.663
+Query: 3
+Nearest neighbor-1: 29044
+distanceApproximate: 1221.58
+distanceTrue: 1221.58
+Query: 4
+Nearest neighbor-1: 52920
+distanceApproximate: 1092.53
+distanceTrue: 1092.53
+Average AF: 1
+Recall@N: 1
+QPS: 18.3305
+tApproximateAverage: 54.554
+tTrueAverage: 45.8196
