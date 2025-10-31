@@ -11,3 +11,8 @@ and wget https://github.com/mrgloom/MNIST-dataset-in-different-formats/raw/maste
 to compile : g++ -O3 -std=c++17 ./main.cpp ./kmeans.cpp ./ivf_flat.cpp -o search
 
 to test : ./search -d ../data/train-images.idx3-ubyte -q ../data/t10k-images.idx3-ubyte   -type mnist -ivfflat -kclusters 50 -nprobe 5 -N 1 -R 2000 -range false
+
+to compile lsh: g++ -O3 -std=c++17   src/main.cpp   src/kmeans.cpp src/ivf_flat.cpp   src/lsh.cpp   -I include   -o search
+
+to test: ./search -d data/train-images.idx3-ubyte -q data/t10k-images.idx3-ubyte \
+   -type mnist -lsh -k 4 -L 5 -w 4.0 -N 1 -R 2000 -range false

@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <unordered_set>
 
-#include "lsh.h"
+#include "../include/lsh.h"
 
 namespace lsh {
 
@@ -131,8 +131,7 @@ namespace lsh {
         return results;
     }
 
-    std::vector<int>
-    LSH::searchRadius(const std::vector<float>& query, double R) const {
+    std::vector<int> LSH::searchRadius(const std::vector<float>& query, double R) const {
         std::unordered_set<unsigned> candidates; //to avoid duplicates
 
         for(int i = 0; i <L_Tables; ++i){
