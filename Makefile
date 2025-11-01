@@ -14,6 +14,7 @@ SRC := \
 	src/hypercube.cpp \
 	src/kmeans.cpp \
 	src/ivf_flat.cpp \
+	src/ivf_pq.cpp \
 	src/main.cpp
 
 # Default target
@@ -26,30 +27,22 @@ $(OUT): $(SRC)
 
 # Run examples
 run-lsh:
-	./$(OUT) \
-		-d data/train-images.idx3-ubyte \
-		-q data/t10k-images.idx3-ubyte \
-		-type mnist \
-		-lsh \
-		-k 6 -L 10 -w 4.0 -N 1 -R 2000 -range false \
-		-o docs/results_lsh.txt
+	./$(OUT) -d data/train-images.idx3-ubyte -q data/t10k-images.idx3-ubyte -type mnist \
+		-lsh -k 6 -L 10 -w 4.0 -N 1 -R 2000 -range false -o docs/results_lsh.txt
 
 run-cube:
-	./$(OUT) \
-		-d data/train-images.idx3-ubyte \
-		-q data/t10k-images.idx3-ubyte \
-		-type mnist \
-		-hypercube \
-		-kproj 14 -M 10 -probes 2 -w 4.0 -N 1 -R 2000 -range false \
+	./$(OUT) -d data/train-images.idx3-ubyte -q data/t10k-images.idx3-ubyte -type mnist \
+		-hypercube -kproj 14 -M 10 -probes 2 -w 4.0 -N 1 -R 2000 -range false \
 		-o docs/results_hypercube.txt $(ARGS)
-#run-ivf:
-	./$(OUT) \
-		-d data/train-images.idx3-ubyte \
-		-q data/t10k-images.idx3-ubyte \
-		-type mnist \
-		-ivfflat \
-		-kclusters 50 -nprobe 5 -N 1 -range false \
-		-o docs/results_ivf.txt
+
+run-ivf:
+	./$(OUT) -d data/train-images.idx3-ubyte -q data/t10k-images.idx3-ubyte -type mnist \
+		-ivfflat -kclusters 50 -nprobe 5 -N 1 -R 2000 -range false -o docs/results_ivf.txt
+
+run-ivfpq:
+	./$(OUT) -d data/train-images.idx3-ubyte -q data/t10k-images.idx3-ubyte -type mnist \
+		-ivfpq -kclusters 50 -nprobe 5 -M 16 -nbits 8 -N 1 -R 2000 -range false \
+		-o docs/results_ivfpq.txt
 
 # Clean build files
 clean:

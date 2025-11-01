@@ -470,23 +470,43 @@ void run_ivfflat(const Matrix& base, const Matrix& queries, const Config& cfg) {
               << "  tApproximateAverage: " << avg_tApprox << "\n"
               << "  tTrueAverage: " << avg_tTrue << "\n";
 }
-void run_ivfpq(const Matrix& base, const Matrix& queries, const Config& cfg) {
-    int train_subset = (int)std::sqrt((double)base.n);  // optional
-    auto ivf = build_ivf_pq(base, cfg.kclusters, cfg.M_pq, cfg.nbits, cfg.seed, train_subset);
-    std::cout << "IVFPQ built: k=" << cfg.kclusters
-              << ", M=" << ivf.pq.M << ", nbits=" << ivf.pq.nbits
-              << ", dsub=" << ivf.pq.dsub << "\n";
 
+void run_ivfpq(const Matrix& base, const Matrix& queries, const Config& cfg) {
+    using std::cout;
+    using std::endl;
+
+    // 1) Build IVFPQ index (coarse k-means + product quantizer)
+    int train_subset = (int)std::sqrt((double)base.n);
+    if (train_subset < 1000) train_subset = std::min(1000, base.n); // minimum for stability
+
+    auto ivf = build_ivf_pq(base, cfg.kclusters, cfg.M_pq, cfg.nbits, cfg.seed, train_subset);
+
+    cout << "IVFPQ built: k=" << cfg.kclusters
+         << ", M=" << cfg.M_pq
+         << ", nbits=" << cfg.nbits
+         << ", dsub=" << (base.d / cfg.M_pq)
+         << ", avg list size ≈ " << (double)base.n / std::max(1, ivf.centroids.n)
+         << endl;
+
+    // 2) Quick smoke test — run first few queries
     const int show = std::min(3, queries.n);
+
     for (int i = 0; i < show; ++i) {
         if (!cfg.do_range) {
-            auto ans = ivf_pq_query_topN(ivf, base, queries.row(i), cfg.nprobe, cfg.N);
-            std::cout << "q" << i << " → got " << ans.ids.size()
-                      << " | nn id=" << (ans.ids.empty()? -1 : ans.ids[0])
-                      << " dist≈"   << (ans.dists.empty()? -1.0f : ans.dists[0]) << "\n";
+            auto ans = ivf_pq_query_topN(ivf, base, queries.row(i),
+                                         cfg.nprobe, cfg.N);
+            cout << "q" << i << " → got " << ans.ids.size()
+                 << " | nn id=" << (ans.ids.empty() ? -1 : ans.ids[0])
+                 << " dist=" << (ans.dists.empty() ? -1.0f : ans.dists[0])
+                 << endl;
         } else {
-            auto ids = ivf_pq_query_range(ivf, base, queries.row(i), cfg.nprobe, (float)cfg.R);
-            std::cout << "q" << i << " → " << ids.size() << " approx ids within R\n";
+            auto ids = ivf_pq_query_range(ivf, base, queries.row(i),
+                                          cfg.nprobe, (float)cfg.R);
+            cout << "q" << i << " → " << ids.size() << " ids within R" << endl;
         }
     }
+
+    // 3) (optional) summary info for debugging / verification
+    cout << "Tested " << show << " queries." << endl;
+    cout << "Use -N <int> or -R <float> and -range true|false to change search mode." << endl;
 }

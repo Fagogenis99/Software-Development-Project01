@@ -1,0 +1,6 @@
+IVFPQ built: k=100, M=16, nbits=8, dsub=49, avg list size ≈ 600
+q0 → got 1 | nn id=14563 dist=906.82
+q1 → got 1 | nn id=28882 dist=1385.18
+q2 → got 1 | nn id=46512 dist=592.379
+Tested 3 queries.
+Use -N <int> or -R <float> and -range true|false to change search mode.
