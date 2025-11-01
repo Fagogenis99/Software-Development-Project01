@@ -1,0 +1,253 @@
+=== IVFPQ EXPERIMENT RESULTS ===
+-------------------------------------------------
+IVFPQ built: k=20, M=8, nbits=6, dsub=98, avg list size ≈ 3000
+q0 → got 1 | nn id=40368 dist=968.103
+q1 → got 1 | nn id=49160 dist=1545.96
+q2 → got 1 | nn id=43844 dist=912.377
+Tested 3 queries.
+Use -N <int> or -R <float> and -range true|false to change search mode.
+-------------------------------------------------
+IVFPQ built: k=20, M=8, nbits=8, dsub=98, avg list size ≈ 3000
+q0 → got 1 | nn id=38620 dist=814.753
+q1 → got 1 | nn id=49160 dist=1563.41
+q2 → got 1 | nn id=39364 dist=855.117
+Tested 3 queries.
+Use -N <int> or -R <float> and -range true|false to change search mode.
+-------------------------------------------------
+IVFPQ built: k=20, M=16, nbits=6, dsub=49, avg list size ≈ 3000
+q0 → got 1 | nn id=53843 dist=851.688
+q1 → got 1 | nn id=28882 dist=1404.59
+q2 → got 1 | nn id=38976 dist=929.082
+Tested 3 queries.
+Use -N <int> or -R <float> and -range true|false to change search mode.
+-------------------------------------------------
+IVFPQ built: k=20, M=16, nbits=8, dsub=49, avg list size ≈ 3000
+q0 → got 1 | nn id=38620 dist=801.425
+q1 → got 1 | nn id=28882 dist=1443.65
+q2 → got 1 | nn id=47333 dist=756.769
+Tested 3 queries.
+Use -N <int> or -R <float> and -range true|false to change search mode.
+-------------------------------------------------
+IVFPQ built: k=20, M=8, nbits=6, dsub=98, avg list size ≈ 3000
+q0 → got 1 | nn id=40368 dist=968.103
+q1 → got 1 | nn id=49160 dist=1545.96
+q2 → got 1 | nn id=21424 dist=882.491
+Tested 3 queries.
+Use -N <int> or -R <float> and -range true|false to change search mode.
+-------------------------------------------------
+IVFPQ built: k=20, M=8, nbits=8, dsub=98, avg list size ≈ 3000
+q0 → got 1 | nn id=38620 dist=814.753
+q1 → got 1 | nn id=49160 dist=1563.41
+q2 → got 1 | nn id=16691 dist=727.344
+Tested 3 queries.
+Use -N <int> or -R <float> and -range true|false to change search mode.
+-------------------------------------------------
+IVFPQ built: k=20, M=16, nbits=6, dsub=49, avg list size ≈ 3000
+q0 → got 1 | nn id=53843 dist=851.688
+q1 → got 1 | nn id=28882 dist=1404.59
+q2 → got 1 | nn id=45790 dist=765.892
+Tested 3 queries.
+Use -N <int> or -R <float> and -range true|false to change search mode.
+-------------------------------------------------
+IVFPQ built: k=20, M=16, nbits=8, dsub=49, avg list size ≈ 3000
+q0 → got 1 | nn id=38620 dist=801.425
+q1 → got 1 | nn id=28882 dist=1443.65
+q2 → got 1 | nn id=16691 dist=636.123
+Tested 3 queries.
+Use -N <int> or -R <float> and -range true|false to change search mode.
+-------------------------------------------------
+IVFPQ built: k=20, M=8, nbits=6, dsub=98, avg list size ≈ 3000
+q0 → got 1 | nn id=40368 dist=968.103
+q1 → got 1 | nn id=49160 dist=1545.96
+q2 → got 1 | nn id=21424 dist=882.491
+Tested 3 queries.
+Use -N <int> or -R <float> and -range true|false to change search mode.
+-------------------------------------------------
+IVFPQ built: k=20, M=8, nbits=8, dsub=98, avg list size ≈ 3000
+q0 → got 1 | nn id=38620 dist=814.753
+q1 → got 1 | nn id=49160 dist=1563.41
+q2 → got 1 | nn id=16691 dist=727.344
+Tested 3 queries.
+Use -N <int> or -R <float> and -range true|false to change search mode.
+-------------------------------------------------
+IVFPQ built: k=20, M=16, nbits=6, dsub=49, avg list size ≈ 3000
+q0 → got 1 | nn id=53843 dist=851.688
+q1 → got 1 | nn id=28882 dist=1404.59
+q2 → got 1 | nn id=45790 dist=765.892
+Tested 3 queries.
+Use -N <int> or -R <float> and -range true|false to change search mode.
+-------------------------------------------------
+IVFPQ built: k=20, M=16, nbits=8, dsub=49, avg list size ≈ 3000
+q0 → got 1 | nn id=38620 dist=801.425
+q1 → got 1 | nn id=28882 dist=1443.65
+q2 → got 1 | nn id=16691 dist=636.123
+Tested 3 queries.
+Use -N <int> or -R <float> and -range true|false to change search mode.
+-------------------------------------------------
+IVFPQ built: k=50, M=8, nbits=6, dsub=98, avg list size ≈ 1200
+q0 → got 1 | nn id=7092 dist=959.261
+q1 → got 1 | nn id=31956 dist=1536.72
+q2 → got 1 | nn id=38455 dist=901.566
+Tested 3 queries.
+Use -N <int> or -R <float> and -range true|false to change search mode.
+-------------------------------------------------
+IVFPQ built: k=50, M=8, nbits=8, dsub=98, avg list size ≈ 1200
+q0 → got 1 | nn id=40368 dist=832.946
+q1 → got 1 | nn id=24010 dist=1458.86
+q2 → got 1 | nn id=15255 dist=759.866
+Tested 3 queries.
+Use -N <int> or -R <float> and -range true|false to change search mode.
+-------------------------------------------------
+IVFPQ built: k=50, M=16, nbits=6, dsub=49, avg list size ≈ 1200
+q0 → got 1 | nn id=53843 dist=908.791
+q1 → got 1 | nn id=49160 dist=1388.82
+q2 → got 1 | nn id=27684 dist=841.935
+Tested 3 queries.
+Use -N <int> or -R <float> and -range true|false to change search mode.
+-------------------------------------------------
+IVFPQ built: k=50, M=16, nbits=8, dsub=49, avg list size ≈ 1200
+q0 → got 1 | nn id=53843 dist=843.685
+q1 → got 1 | nn id=52142 dist=1416.34
+q2 → got 1 | nn id=20848 dist=731.128
+Tested 3 queries.
+Use -N <int> or -R <float> and -range true|false to change search mode.
+-------------------------------------------------
+IVFPQ built: k=50, M=8, nbits=6, dsub=98, avg list size ≈ 1200
+q0 → got 1 | nn id=7092 dist=959.261
+q1 → got 1 | nn id=31956 dist=1536.72
+q2 → got 1 | nn id=39364 dist=875.85
+Tested 3 queries.
+Use -N <int> or -R <float> and -range true|false to change search mode.
+-------------------------------------------------
+IVFPQ built: k=50, M=8, nbits=8, dsub=98, avg list size ≈ 1200
+q0 → got 1 | nn id=40368 dist=832.946
+q1 → got 1 | nn id=24010 dist=1458.86
+q2 → got 1 | nn id=15255 dist=759.866
+Tested 3 queries.
+Use -N <int> or -R <float> and -range true|false to change search mode.
+-------------------------------------------------
+IVFPQ built: k=50, M=16, nbits=6, dsub=49, avg list size ≈ 1200
+q0 → got 1 | nn id=53843 dist=908.791
+q1 → got 1 | nn id=49160 dist=1388.82
+q2 → got 1 | nn id=27684 dist=841.935
+Tested 3 queries.
+Use -N <int> or -R <float> and -range true|false to change search mode.
+-------------------------------------------------
+IVFPQ built: k=50, M=16, nbits=8, dsub=49, avg list size ≈ 1200
+q0 → got 1 | nn id=53843 dist=843.685
+q1 → got 1 | nn id=52142 dist=1416.34
+q2 → got 1 | nn id=20848 dist=731.128
+Tested 3 queries.
+Use -N <int> or -R <float> and -range true|false to change search mode.
+-------------------------------------------------
+IVFPQ built: k=50, M=8, nbits=6, dsub=98, avg list size ≈ 1200
+q0 → got 1 | nn id=7092 dist=959.261
+q1 → got 1 | nn id=31956 dist=1536.72
+q2 → got 1 | nn id=39364 dist=875.85
+Tested 3 queries.
+Use -N <int> or -R <float> and -range true|false to change search mode.
+-------------------------------------------------
+IVFPQ built: k=50, M=8, nbits=8, dsub=98, avg list size ≈ 1200
+q0 → got 1 | nn id=40368 dist=832.946
+q1 → got 1 | nn id=24010 dist=1458.86
+q2 → got 1 | nn id=15255 dist=759.866
+Tested 3 queries.
+Use -N <int> or -R <float> and -range true|false to change search mode.
+-------------------------------------------------
+IVFPQ built: k=50, M=16, nbits=6, dsub=49, avg list size ≈ 1200
+q0 → got 1 | nn id=53843 dist=908.791
+q1 → got 1 | nn id=49160 dist=1388.82
+q2 → got 1 | nn id=27684 dist=841.935
+Tested 3 queries.
+Use -N <int> or -R <float> and -range true|false to change search mode.
+-------------------------------------------------
+IVFPQ built: k=50, M=16, nbits=8, dsub=49, avg list size ≈ 1200
+q0 → got 1 | nn id=53843 dist=843.685
+q1 → got 1 | nn id=52142 dist=1416.34
+q2 → got 1 | nn id=20848 dist=731.128
+Tested 3 queries.
+Use -N <int> or -R <float> and -range true|false to change search mode.
+-------------------------------------------------
+IVFPQ built: k=100, M=8, nbits=6, dsub=98, avg list size ≈ 600
+q0 → got 1 | nn id=48108 dist=919.829
+q1 → got 1 | nn id=26357 dist=1521.19
+q2 → got 1 | nn id=53004 dist=726.161
+Tested 3 queries.
+Use -N <int> or -R <float> and -range true|false to change search mode.
+-------------------------------------------------
+IVFPQ built: k=100, M=8, nbits=8, dsub=98, avg list size ≈ 600
+q0 → got 1 | nn id=27059 dist=926.701
+q1 → got 1 | nn id=23468 dist=1537.37
+q2 → got 1 | nn id=54259 dist=706.266
+Tested 3 queries.
+Use -N <int> or -R <float> and -range true|false to change search mode.
+-------------------------------------------------
+IVFPQ built: k=100, M=16, nbits=6, dsub=49, avg list size ≈ 600
+q0 → got 1 | nn id=15260 dist=946.619
+q1 → got 1 | nn id=53455 dist=1450.01
+q2 → got 1 | nn id=45790 dist=712.4
+Tested 3 queries.
+Use -N <int> or -R <float> and -range true|false to change search mode.
+-------------------------------------------------
+IVFPQ built: k=100, M=16, nbits=8, dsub=49, avg list size ≈ 600
+q0 → got 1 | nn id=53843 dist=912.998
+q1 → got 1 | nn id=23468 dist=1478.91
+q2 → got 1 | nn id=46512 dist=592.379
+Tested 3 queries.
+Use -N <int> or -R <float> and -range true|false to change search mode.
+-------------------------------------------------
+IVFPQ built: k=100, M=8, nbits=6, dsub=98, avg list size ≈ 600
+q0 → got 1 | nn id=48108 dist=919.829
+q1 → got 1 | nn id=28882 dist=1515.04
+q2 → got 1 | nn id=27684 dist=726.161
+Tested 3 queries.
+Use -N <int> or -R <float> and -range true|false to change search mode.
+-------------------------------------------------
+IVFPQ built: k=100, M=8, nbits=8, dsub=98, avg list size ≈ 600
+q0 → got 1 | nn id=27059 dist=926.701
+q1 → got 1 | nn id=28882 dist=1480.86
+q2 → got 1 | nn id=54259 dist=706.266
+Tested 3 queries.
+Use -N <int> or -R <float> and -range true|false to change search mode.
+-------------------------------------------------
+IVFPQ built: k=100, M=16, nbits=6, dsub=49, avg list size ≈ 600
+q0 → got 1 | nn id=15260 dist=946.619
+q1 → got 1 | nn id=53455 dist=1450.01
+q2 → got 1 | nn id=45790 dist=712.4
+Tested 3 queries.
+Use -N <int> or -R <float> and -range true|false to change search mode.
+-------------------------------------------------
+IVFPQ built: k=100, M=16, nbits=8, dsub=49, avg list size ≈ 600
+q0 → got 1 | nn id=14563 dist=906.82
+q1 → got 1 | nn id=28882 dist=1385.18
+q2 → got 1 | nn id=46512 dist=592.379
+Tested 3 queries.
+Use -N <int> or -R <float> and -range true|false to change search mode.
+-------------------------------------------------
+IVFPQ built: k=100, M=8, nbits=6, dsub=98, avg list size ≈ 600
+q0 → got 1 | nn id=48108 dist=919.829
+q1 → got 1 | nn id=28882 dist=1515.04
+q2 → got 1 | nn id=19968 dist=726.161
+Tested 3 queries.
+Use -N <int> or -R <float> and -range true|false to change search mode.
+-------------------------------------------------
+IVFPQ built: k=100, M=8, nbits=8, dsub=98, avg list size ≈ 600
+q0 → got 1 | nn id=27059 dist=926.701
+q1 → got 1 | nn id=28882 dist=1480.86
+q2 → got 1 | nn id=54259 dist=706.266
+Tested 3 queries.
+Use -N <int> or -R <float> and -range true|false to change search mode.
+-------------------------------------------------
+IVFPQ built: k=100, M=16, nbits=6, dsub=49, avg list size ≈ 600
+q0 → got 1 | nn id=15260 dist=946.619
+q1 → got 1 | nn id=53455 dist=1450.01
+q2 → got 1 | nn id=45790 dist=712.4
+Tested 3 queries.
+Use -N <int> or -R <float> and -range true|false to change search mode.
+-------------------------------------------------
+IVFPQ built: k=100, M=16, nbits=8, dsub=49, avg list size ≈ 600
+q0 → got 1 | nn id=14563 dist=906.82
+q1 → got 1 | nn id=28882 dist=1385.18
+q2 → got 1 | nn id=46512 dist=592.379
+Tested 3 queries.
+Use -N <int> or -R <float> and -range true|false to change search mode.
