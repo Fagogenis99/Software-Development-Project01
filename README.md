@@ -1,13 +1,13 @@
-# 🧠 Approximate Nearest Neighbor Search  
+# Approximate Nearest Neighbor Search  
 ### LSH • Hypercube • IVFFlat • IVFPQ
 
-## 👥 Ομάδα Εργασίας
+## Ομάδα Εργασίας
 - **Νίκος Βουρτσανής — sdi2200022**
 - **Κωνσταντίνος Φαγογένης — sdi2100199**
 
 ---
 
-## 📘 Περιγραφή Έργου
+## Περιγραφή Έργου
 
 Το έργο αποτελεί την **1η εργασία** του μαθήματος *Ανάπτυξη Λογισμικού για Αλγοριθμικά Προβλήματα* και αφορά την υλοποίηση και σύγκριση τεχνικών για **Approximate Nearest Neighbor Search (ANN)**.
 
@@ -27,12 +27,12 @@
 
 Datasets:
 
-- 🖼 **MNIST**
-- 📦 **SIFT1M**
+- **MNIST**
+- **SIFT1M**
 
 ---
 
-## 📊 Μετρικές Απόδοσης
+## Μετρικές Απόδοσης
 
 Το πρόγραμμα υπολογίζει:
 
@@ -45,7 +45,7 @@ Datasets:
 
 ---
 
-## 📂 Δομή Φακέλων
+## Δομή Φακέλων
 
 Software-Development-Project1/
 ├── include/
@@ -99,7 +99,7 @@ Software-Development-Project1/
 └── test_ivfpq.cpp
 ---
 
-## ⚙️ Μεταγλώττιση
+## Μεταγλώττιση
 
 ### Με `make`
 ```bash
@@ -111,7 +111,7 @@ g++ -O3 -std=c++17 -Iinclude \
 src/vector_utils.cpp src/lsh.cpp src/hypercube.cpp \
 src/ivf_flat.cpp src/ivf_pq.cpp src/bruteForce.cpp src/main.cpp -o search
 
-▶️ Παραδείγματα Εκτέλεσης
+Παραδείγματα Εκτέλεσης
 MNIST — LSH
 ./search -d data/train-images.idx3-ubyte -q data/t10k-images.idx3-ubyte -type mnist \
 -lsh -k 4 -L 5 -w 4.0 -N 1 -R 2000 -range false
@@ -133,7 +133,7 @@ SIFT Dataset
 -lsh -k 4 -L 5 -w 4.0 -N 1 -R 2 -range false
 
 
-📤 Μορφή Εξόδου
+Μορφή Εξόδου
 
 Query:
 NearestNeighbor-1:

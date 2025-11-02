@@ -472,12 +472,12 @@ void run_ivfflat(const Matrix& base, const Matrix& queries, const Config& cfg) {
 }
 
 void run_ivfpq(const Matrix& base, const Matrix& queries, const Config& cfg) {
-    using std::cout;
-    using std::endl;
+    using namespace std;
+    using namespace std::chrono;
 
     // 1) Build IVFPQ index (coarse k-means + product quantizer)
     int train_subset = (int)std::sqrt((double)base.n);
-    if (train_subset < 1000) train_subset = std::min(1000, base.n); // minimum for stability
+    if (train_subset < 1000) train_subset = std::min(1000, base.n);
 
     auto ivf = build_ivf_pq(base, cfg.kclusters, cfg.M_pq, cfg.nbits, cfg.seed, train_subset);
 
@@ -486,27 +486,69 @@ void run_ivfpq(const Matrix& base, const Matrix& queries, const Config& cfg) {
          << ", nbits=" << cfg.nbits
          << ", dsub=" << (base.d / cfg.M_pq)
          << ", avg list size ≈ " << (double)base.n / std::max(1, ivf.centroids.n)
-         << endl;
+         << "\n";
 
-    // 2) Quick smoke test — run first few queries
+    // 2) Quick smoke test — first few queries
     const int show = std::min(3, queries.n);
-
     for (int i = 0; i < show; ++i) {
         if (!cfg.do_range) {
-            auto ans = ivf_pq_query_topN(ivf, base, queries.row(i),
-                                         cfg.nprobe, cfg.N);
+            auto ans = ivf_pq_query_topN(ivf, base, queries.row(i), cfg.nprobe, cfg.N);
             cout << "q" << i << " → got " << ans.ids.size()
                  << " | nn id=" << (ans.ids.empty() ? -1 : ans.ids[0])
-                 << " dist=" << (ans.dists.empty() ? -1.0f : ans.dists[0])
-                 << endl;
+                 << " dist=" << (ans.dists.empty() ? -1.0f : ans.dists[0]) << "\n";
         } else {
-            auto ids = ivf_pq_query_range(ivf, base, queries.row(i),
-                                          cfg.nprobe, (float)cfg.R);
-            cout << "q" << i << " → " << ids.size() << " ids within R" << endl;
+            auto ids = ivf_pq_query_range(ivf, base, queries.row(i), cfg.nprobe, (float)cfg.R);
+            cout << "q" << i << " → " << ids.size() << " ids within R\n";
         }
     }
+    cout << "Tested " << show << " queries.\n";
+    cout << "Use -N <int> or -R <float> and -range true|false to change search mode.\n";
 
-    // 3) (optional) summary info for debugging / verification
-    cout << "Tested " << show << " queries." << endl;
-    cout << "Use -N <int> or -R <float> and -range true|false to change search mode." << endl;
+    // 3) === Evaluation for scripts (prints the lines your grep expects) ===
+    // Convert base to vector<vector<float>> for brute force
+    std::vector<std::vector<float>> base_vecs(base.n);
+    for (int i = 0; i < base.n; ++i)
+        base_vecs[i] = std::vector<float>(base.row(i), base.row(i) + base.d);
+
+    double total_recall = 0.0, total_af = 0.0;
+    double total_tApprox = 0.0, total_tTrue = 0.0;
+
+    const int Q = std::min(queries.n, 5); // evaluate on 5 queries (same as others)
+    for (int qi = 0; qi < Q; ++qi) {
+        std::vector<float> q(queries.row(qi), queries.row(qi) + queries.d);
+
+        // Approximate
+        auto t0 = high_resolution_clock::now();
+        auto ans = ivf_pq_query_topN(ivf, base, q.data(), cfg.nprobe, cfg.N);
+        auto t1 = high_resolution_clock::now();
+        double tApprox = duration_cast<microseconds>(t1 - t0).count() / 1000.0;
+        total_tApprox += tApprox;
+
+        // True (brute)
+        auto t2 = high_resolution_clock::now();
+        auto truth = brute::knnSearch(base_vecs, q, cfg.N);
+        auto t3 = high_resolution_clock::now();
+        double tTrue = duration_cast<microseconds>(t3 - t2).count() / 1000.0;
+        total_tTrue += tTrue;
+
+        // Metrics
+        double af = (ans.dists.empty() || truth.empty()) ? 0.0 : ans.dists[0] / truth[0].second;
+        double recall = (ans.ids.empty() || truth.empty()) ? 0.0 :
+                        ((ans.ids[0] == truth[0].first) ? 1.0 : 0.0);
+
+        total_af += af;
+        total_recall += recall;
+    }
+
+    double avg_recall = total_recall / Q;
+    double avg_af = total_af / Q;
+    double avg_tApprox = total_tApprox / Q;
+    double qps = (avg_tApprox > 0) ? (1000.0 / avg_tApprox) : 0.0;
+
+    // EXACT strings used by your scripts:
+    cout << "Average AF: " << avg_af << "\n";
+    cout << "Recall@N: " << avg_recall << "\n";
+    cout << "QPS: " << qps << "\n";
+    cout << "tApproximateAverage: " << avg_tApprox << "\n";
 }
+

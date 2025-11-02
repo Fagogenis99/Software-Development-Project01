@@ -3,7 +3,7 @@
 #include <string>
 #include <cstdlib>  // for system()
 
-void plotWithGnuplot(const std::string& csv, const std::string& title, const std::string& output) {
+void plotWithGnuplot(const std::string& csv, const std::string& title, const std::string& output, int tApproxCol = 7) {
     std::ofstream gp("docs/report/plot_commands.gp");
     gp << "set terminal pngcairo size 800,600\n";
     gp << "set output '" << output << "'\n";
@@ -31,5 +31,9 @@ int main() {
                     "IVF-Flat Recall vs Time",
                     "docs/report/figs/ivfflat_recall_vs_time.png");
 
+    plotWithGnuplot("docs/report/results/ivfpq.csv",
+                    "IVFPQ Recall vs Time",
+                    "docs/report/figs/ivfpq_recall_vs_time.png",
+                    8);
     return 0;
 }
