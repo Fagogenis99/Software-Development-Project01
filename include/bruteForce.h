@@ -1,5 +1,6 @@
 #ifndef BRUTEFORCE_H
 #define BRUTEFORCE_H
+#pragma once
 #include <vector>
 #include <utility>
 #include "vector_utils.h"
@@ -27,6 +28,12 @@ namespace brute {
     std::vector<int>
     rangeSearch(const std::vector<std::vector<float>>& dataset, const std::vector<float> query, double R);
 
+    //NEW - Full knn graph for all points in dataset for project2 using knnSearch inside it
+    std::vector<int>
+    compute_knn_graph_all(const std::vector<std::vector<float>>& dataset, int k);
+
+    //NEW - writing the knn graph into a binary file for pyhton extraction later 
+    void save_knn_binary(const std::string& path, const std::vector<int>& knn_idx, int n, int k);
     }
 
 #endif //BRUTEFORCE_H

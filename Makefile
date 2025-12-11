@@ -44,6 +44,28 @@ run-ivfpq:
 		-ivfpq -kclusters 50 -nprobe 5 -M 16 -nbits 8 -N 1 -R 2000 -range false \
 		-o docs/results_ivfpq.txt
 
+run-build-knn-mnist:
+	./$(OUT) \
+		-d data/train-images.idx3-ubyte \
+		-q data/t10k-images.idx3-ubyte \
+		-type mnist \
+		-build_knn \
+		-k 10 \
+		-i data/knn_graph.bin \
+		-knn_ivf false
+
+run-build-knn-sift:
+	./$(OUT) \
+		-d data/sift/sift_base.fvecs \
+		-q data/sift/sift_query.fvecs \
+		-type sift \
+		-build_knn \
+		-k 10 \
+		-i data/knn_graph_sift.bin \
+		-knn_ivf false
+
+	
+
 # Clean build files
 clean:
 	rm -f $(OUT)

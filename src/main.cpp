@@ -24,6 +24,7 @@ struct Config {
     std::string query_path;   // -q
     std::string output_path = "results.txt"; // -o
     std::string type;         // -type mnist|sift
+    std::string knn_method ="ivf"; //default best
     int N = 1;                // -N
     double R = 2000.0;        // -R (MNIST default; overwrite if SIFT with 2.0)
     bool do_range = false;    // -range true|false
@@ -51,6 +52,12 @@ struct Config {
     int M_pq = 16;            // -M (number of sub-vectors for PQ)
     int nbits = 8;            // -nbits (2^nbits centroids per subspace)
 
+    //NEW ADDITION-BUILD KNN GRAPH MODE FOR PROJECT 2
+    bool build_knn = false;// if true, we dont run a-nn algorithms, we build knn graph only
+    int knn_k = 10; //number of nearest neighbours to search for knn graph
+    std::string index_path; //where to save the binary file for the knn graph
+//    bool knn_use_ivf = false; //whether to use ivf to build knn graph
+
     void finalize_defaults() {
         // R default depends on dataset type per assignment:
         // MNIST: R=2000, SIFT: R=2
@@ -76,7 +83,7 @@ static bool to_bool(const std::string& s) {
 Config parse_args(int argc, char** argv) {
     Config cfg;
     if (argc < 2) throw std::runtime_error("Insufficient arguments. Use -d, -q, -type and a method flag (-lsh|-hypercube|-ivfflat|-ivfpq).");
-
+    
     for (int i = 1; i < argc; ++i) {
         std::string k = argv[i];
 
@@ -121,17 +128,31 @@ Config parse_args(int argc, char** argv) {
         else if (k == "-ivfpq") { cfg.use_ivfpq = true; }
         else if (k == "-nbits") { need(1); cfg.nbits = std::stoi(argv[++i]); }
 
+        //NEW - KNN GRAPH BUILDING MODE
+        else if (k == "-build_knn") { cfg.build_knn = true; }
+        else if (k == "-K") { need(1); cfg.knn_k = std::stoi(argv[++i]); }
+        else if (k == "-i") { need(1); cfg.index_path = argv[++i]; }
+        //else if (k == "-knn_ivf") { need(1); cfg.knn_use_ivf = to_bool(argv[++i]); }
+
+        else if (k == "-build_knn_method") {need(1); cfg.knn_method = argv[++i]; } //new new
+
         else {
             throw std::runtime_error("Unknown option: " + k);
         }
+    
     }
 
     // method selection sanity
-    int methods = (cfg.use_lsh?1:0) + (cfg.use_hypercube?1:0) + (cfg.use_ivfflat?1:0) + (cfg.use_ivfpq?1:0);
-    if (methods != 1) throw std::runtime_error("Select exactly one method: -lsh | -hypercube | -ivfflat | -ivfpq");
+    int methods = (cfg.use_lsh?1:0) + (cfg.use_hypercube?1:0) + (cfg.use_ivfflat?1:0) + (cfg.use_ivfpq?1:0) + (cfg.build_knn?1:0);
+    if (methods != 1) throw std::runtime_error("Select exactly one method: -lsh | -hypercube | -ivfflat | -ivfpq | -build_knn");
 
-    if (cfg.input_path.empty() || cfg.query_path.empty() || cfg.type.empty())
-        throw std::runtime_error("Missing required arguments: -d <input> -q <query> -type <mnist|sift>");
+    //if (cfg.input_path.empty() || cfg.query_path.empty() || cfg.type.empty())
+      //  throw std::runtime_error("Missing required arguments: -d <input> -q <query> -type <mnist|sift>");
+    if (cfg.input_path.empty() || cfg.type.empty())
+        throw std::runtime_error("Missing required arguments: -d <input> -type <mnist|sift>");
+
+    if (!cfg.build_knn && cfg.query_path.empty())
+        throw std::runtime_error("Query path (-q) required unless using -build_knn");
 
     // finalize dataset-dependent defaults (R)
     cfg.finalize_defaults();
@@ -147,31 +168,51 @@ void run_lsh(const Matrix& base, const Matrix& queries, const Config& cfg);
 void run_hypercube(const Matrix& base, const Matrix& queries, const Config& cfg);
 void run_ivfflat(const Matrix& base, const Matrix& queries, const Config& cfg);
 void run_ivfpq(const Matrix& base, const Matrix& queries, const Config& cfg);
+void run_build_knn(const Matrix& base, const Config& cfg);
 
 int main(int argc, char** argv) {
     try {
         Config cfg = parse_args(argc, argv);
-        std::cerr << "Loading datasets...\n";
+        std::cerr << "Loading datasets..\n";
 
+    //    Matrix base, queries;
+       // if (iequals(cfg.type, "mnist")) {
+           // base    = load_mnist_images(cfg.input_path, /*normalize=*/false);
+         //   queries = load_mnist_images(cfg.query_path, /*normalize=*/false);
+       // } else {
+            //base    = load_fvecs(cfg.input_path);
+          //  queries = load_fvecs(cfg.query_path);
+        //}
+
+      //  if (base.d != queries.d) throw std::runtime_error("Dimension mismatch between base and query sets"); 
         Matrix base, queries;
+
         if (iequals(cfg.type, "mnist")) {
-            base    = load_mnist_images(cfg.input_path, /*normalize=*/false);
-            queries = load_mnist_images(cfg.query_path, /*normalize=*/false);
-        } else {
-            base    = load_fvecs(cfg.input_path);
+            base = load_mnist_images(cfg.input_path, false);
+
+        if (!cfg.build_knn)
+            queries = load_mnist_images(cfg.query_path, false); 
+        }
+        else {
+            base = load_fvecs(cfg.input_path);
+
+        if (!cfg.build_knn)
             queries = load_fvecs(cfg.query_path);
         }
 
-        if (base.d != queries.d) throw std::runtime_error("Dimension mismatch between base and query sets");
+        if (!cfg.build_knn && base.d != queries.d)
+            throw std::runtime_error("Dimension mismatch between base and query sets");
+  
 
         std::cerr << "Loaded base n=" << base.n << " d=" << base.d
                   << " | queries n=" << queries.n << "\n";
 
         // dispatch
-        if (cfg.use_lsh)        run_lsh(base, queries, cfg);
+        if (cfg.use_lsh)            run_lsh(base, queries, cfg);
         else if (cfg.use_hypercube) run_hypercube(base, queries, cfg);
         else if (cfg.use_ivfflat)   run_ivfflat(base, queries, cfg);
         else if (cfg.use_ivfpq)     run_ivfpq(base, queries, cfg);
+        else if(cfg.build_knn)      run_build_knn(base, cfg); //new add
 
         return 0;
     } catch (const std::exception& e) {
@@ -481,7 +522,7 @@ void run_ivfpq(const Matrix& base, const Matrix& queries, const Config& cfg) {
 
     auto ivf = build_ivf_pq(base, cfg.kclusters, cfg.M_pq, cfg.nbits, cfg.seed, train_subset);
 
-    cout << "IVFPQ built: k=" << cfg.kclusters
+    std::cout << "IVFPQ built: k=" << cfg.kclusters
          << ", M=" << cfg.M_pq
          << ", nbits=" << cfg.nbits
          << ", dsub=" << (base.d / cfg.M_pq)
@@ -493,16 +534,16 @@ void run_ivfpq(const Matrix& base, const Matrix& queries, const Config& cfg) {
     for (int i = 0; i < show; ++i) {
         if (!cfg.do_range) {
             auto ans = ivf_pq_query_topN(ivf, base, queries.row(i), cfg.nprobe, cfg.N);
-            cout << "q" << i << " → got " << ans.ids.size()
+            std::cout << "q" << i << " → got " << ans.ids.size()
                  << " | nn id=" << (ans.ids.empty() ? -1 : ans.ids[0])
                  << " dist=" << (ans.dists.empty() ? -1.0f : ans.dists[0]) << "\n";
         } else {
             auto ids = ivf_pq_query_range(ivf, base, queries.row(i), cfg.nprobe, (float)cfg.R);
-            cout << "q" << i << " → " << ids.size() << " ids within R\n";
+            std::cout << "q" << i << " → " << ids.size() << " ids within R\n";
         }
     }
-    cout << "Tested " << show << " queries.\n";
-    cout << "Use -N <int> or -R <float> and -range true|false to change search mode.\n";
+    std::cout << "Tested " << show << " queries.\n";
+    std::cout << "Use -N <int> or -R <float> and -range true|false to change search mode.\n";
 
     // 3) === Evaluation for scripts (prints the lines your grep expects) ===
     // Convert base to vector<vector<float>> for brute force
@@ -551,4 +592,148 @@ void run_ivfpq(const Matrix& base, const Matrix& queries, const Config& cfg) {
     cout << "QPS: " << qps << "\n";
     cout << "tApproximateAverage: " << avg_tApprox << "\n";
 }
+/*Κάνει convert το Matrix σε vector<vector<float>>
 
+Διαβάζει cfg.knn_method
+
+Επιλέγει LSH / Hypercube / IVFFlat / IVFPQ
+
+Για κάθε σημείο i, ζητά K+1 γείτονες, πετάει το i (self) και κρατάει μέχρι K.
+
+Γεμίζει με -1 αν δεν φτάνουν.
+
+Σώζει το flat array με brute::save_knn_binary.*/
+
+void run_build_knn(const Matrix& base, const Config& cfg) {
+    using namespace std;
+
+    const int n = base.n;
+    const int d = base.d;
+    const int K = cfg.knn_k;
+
+    string method = cfg.knn_method;  
+    for (auto& c : method) c = std::tolower(c);
+
+    if (method != "lsh" && method != "cube" && method != "ivf" && method != "pq") {
+        throw std::runtime_error("Invalid -build_knn_method. Use: lsh | cube | ivf | pq");
+    }
+
+    string out_path = cfg.index_path;
+    if (out_path.empty())
+        out_path = "knn_graph_" + method + "_K" + std::to_string(K) + ".bin";
+
+    cout << "[build_knn] Building kNN using method = " << method << endl;
+    cout << "  n = " << n << ", d = " << d << ", K = " << K << endl;
+
+    // Convert Matrix to vector<vector<float>>
+    vector<vector<float>> base_vecs(n);
+    for (int i = 0; i < n; i++)
+        base_vecs[i] = vector<float>(base.row(i), base.row(i) + d);
+
+    vector<int> knn_idx(n * K, -1);
+
+    // =============================
+    //  LSH METHOD
+    // =============================
+    if (method == "lsh") {
+        cout << "  -> Using LSH\n";
+
+        lsh::LSH index(d, cfg.k, cfg.L, cfg.w, -1, cfg.seed);
+        index.buildIndex(base_vecs);
+
+        for (int i = 0; i < n; i++) {
+            auto neigh = index.searchKNN(base_vecs[i], K+1);
+
+            vector<int> row;
+            for (auto& p : neigh) {
+                if (p.first == i) continue; 
+                row.push_back(p.first);
+                if ((int)row.size() == K) break;
+            }
+            while ((int)row.size() < K) row.push_back(-1);
+
+            for (int j = 0; j < K; j++)
+                knn_idx[i*K + j] = row[j];
+        }
+    }
+
+    // =============================
+    //  HYPERCUBE METHOD
+    // =============================
+    else if (method == "cube") {
+        cout << "  -> Using Hypercube\n";
+
+        cube::Hypercube hc(d, cfg.kproj, cfg.w, cfg.M, cfg.probes, cfg.seed);
+        hc.buildIndex(base_vecs);
+
+        for (int i = 0; i < n; i++) {
+            auto neigh = hc.searchKNN(base_vecs[i], K+1);
+
+            vector<int> row;
+            for (auto& p : neigh) {
+                if (p.first == i) continue;
+                row.push_back(p.first);
+                if ((int)row.size() == K) break;
+            }
+            while ((int)row.size() < K) row.push_back(-1);
+
+            for (int j = 0; j < K; j++)
+                knn_idx[i*K + j] = row[j];
+        }
+    }
+
+    // =============================
+    //  IVFFlat METHOD
+    // =============================
+    else if (method == "ivf") {
+        cout << "  -> Using IVFFlat\n";
+
+        int train_subset = (int)std::sqrt((double)n);
+        auto ivf = build_ivf_flat(base, cfg.kclusters, cfg.seed, train_subset);
+
+        for (int i = 0; i < n; i++) {
+            auto ans = ivf_flat_query_topN(ivf, base, base.row(i), cfg.nprobe, K+1);
+
+            vector<int> row;
+            for (int id : ans.ids) {
+                if (id == i) continue;
+                row.push_back(id);
+                if ((int)row.size() == K) break;
+            }
+            while ((int)row.size() < K) row.push_back(-1);
+
+            for (int j = 0; j < K; j++)
+                knn_idx[i*K + j] = row[j];
+        }
+    }
+
+    // =============================
+    //  IVFPQ METHOD
+    // =============================
+    else if (method == "pq") {
+        cout << "  -> Using IVFPQ\n";
+
+        int train_subset = (int)std::sqrt((double)n);
+        auto ivf = build_ivf_pq(base, cfg.kclusters, cfg.M_pq, cfg.nbits, cfg.seed, train_subset);
+
+        for (int i = 0; i < n; i++) {
+            auto ans = ivf_pq_query_topN(ivf, base, base.row(i), cfg.nprobe, K+1);
+
+            vector<int> row;
+            for (int id : ans.ids) {
+                if (id == i) continue;
+                row.push_back(id);
+                if ((int)row.size() == K) break;
+            }
+            while ((int)row.size() < K) row.push_back(-1);
+
+            for (int j = 0; j < K; j++)
+                knn_idx[i*K + j] = row[j];
+        }
+    }
+
+    // Save to binary
+    brute::save_knn_binary(out_path, knn_idx, n, K);
+
+    std::cout << "[build_knn] Saved kNN graph to " << out_path << endl;
+}
