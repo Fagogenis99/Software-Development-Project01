@@ -28,7 +28,7 @@ static std::vector<int> top_nprobe_centroids(const Matrix& C, const float* q, in
     return idx;
 }
 
-// απόσπασμα υποδιανύσματος (pointer) [i*Dsub .. (i+1)*Dsub)
+// subvector pointer for subspace i: [i*Dsub .. (i+1)*Dsub)
 static inline const float* subvec(const float* x, int i, int dsub) {
     return x + i * dsub;
 }
@@ -71,7 +71,7 @@ IVFIndexPQ build_ivf_pq(const Matrix& base,
     const int dsub = base.d / M;
     const int s = 1 << nbits;
 
-    // 1) coarse k-means
+    // 1) Coarse k-means
     KMeansParams kp;
     kp.k = kclusters;
     kp.max_iters = 50;
@@ -89,18 +89,18 @@ IVFIndexPQ build_ivf_pq(const Matrix& base,
     ivf.pq.M = M; ivf.pq.nbits = nbits; ivf.pq.s = s; ivf.pq.dsub = dsub;
     ivf.pq.C.resize(M);
 
-    // 2) Συλλογή residuals για training codebooks (υποσύνολο για ταχύτητα)
-    // Παίρνουμε subsample ~ sqrt(n) για εκπαίδευση codebooks
+    // 2) Collect residuals for training codebooks (use a subset for speed)
+    //    We take a subsample of ~sqrt(n) for training the codebooks
     int trainN = (int)std::sqrt((double)base.n);
     if (trainN < s) trainN = s;
     if (trainN > base.n) trainN = base.n;
 
     std::vector<int> idx(trainN);
-    for (int i = 0; i < trainN; ++i) idx[i] = i; // απλό prefix (ή μπορείς να κανεις random)
+    for (int i = 0; i < trainN; ++i) idx[i] = i; // simple prefix (could also randomize)
 
-    // 3) Εκπαίδευση codebooks ανά υποχώρο
+    // 3) Train codebooks per subspace
     for (int si = 0; si < M; ++si) {
-        // φτιάξε matrix residuals για τον υποχώρο si: trainN x dsub
+        // Build residual matrix for subspace si: trainN x dsub
         Matrix RS; RS.n = trainN; RS.d = dsub; RS.a.assign((size_t)trainN * dsub, 0.0f);
         for (int t = 0; t < trainN; ++t) {
             int i = idx[t];
@@ -115,28 +115,28 @@ IVFIndexPQ build_ivf_pq(const Matrix& base,
         psub.k = s;
         psub.max_iters = 50;
         psub.tol = 1e-4f;
-        psub.seed = seed + 1234 + si; // διαφορετικό seed ανά υποχώρο
+        psub.seed = seed + 1234 + si; // different seed per subspace
         psub.use_kmeanspp = true;
-        psub.train_subset = -1; // χρησιμοποιούμε RS ολόκληρο
+        psub.train_subset = -1; // use RS entirely
 
         KMeansResult rsub = kmeans_train(RS, psub);
         ivf.pq.C[si] = std::move(rsub.centroids); // s x dsub
     }
 
-    // 4) Κωδικοποίηση & inverted lists
-    // Για κάθε σημείο: βρίσκουμε coarse centroid c, residual r = x - c,
-    // μετά ανά υποχώρο si βρίσκουμε κοντινότερο κωδικό h και τον γράφουμε.
+    // 4) Encoding & inverted lists
+    // For each point: find its coarse centroid c, residual r = x - c,
+    // then per subspace si find the nearest code h and write it.
     for (int i = 0; i < base.n; ++i) {
         int c = km.assign[i];
         ivf.ids[c].push_back(i);
         auto& codes_c = ivf.codes[c];
         codes_c.reserve(codes_c.size() + (size_t)M);
 
-        // residual subspace by subspace (δεν κρατάμε ολόκληρο residual στη μνήμη)
+        // Residual subspace by subspace (we don't store the full residual in memory)
         for (int si = 0; si < M; ++si) {
-            // r_i = x_i - c_i (υποχώρος)
-            // βρες κοντινότερο h στο codebook C[si]
-            // Για οικονομία, κάνουμε argmin «in-place»
+            // r_i = x_i - c_i (subspace)
+            // find nearest h in codebook C[si]
+            // For efficiency, compute argmin "in-place"
             int best = 0;
             float bd = std::numeric_limits<float>::infinity();
 
@@ -161,8 +161,8 @@ IVFIndexPQ build_ivf_pq(const Matrix& base,
 // ---------- queries (ADC with LUTs) ----------
 
 TopNPQ ivf_pq_query_topN(const IVFIndexPQ& ivf,
-                       const Matrix& base,
-                       const float* q, int nprobe, int N)
+                         const Matrix& base,
+                         const float* q, int nprobe, int N)
 {
     TopNPQ res;
     if (N <= 0 || ivf.centroids.n == 0) return res;
@@ -170,28 +170,28 @@ TopNPQ ivf_pq_query_topN(const IVFIndexPQ& ivf,
     nprobe = std::max(1, std::min(nprobe, ivf.centroids.n));
     std::vector<int> probes = top_nprobe_centroids(ivf.centroids, q, nprobe);
 
-    // Θα χρειαστούμε LUT ανά probed centroid (για το residual του q ως προς αυτό το centroid)
+    // We need a LUT per probed centroid (for the residual of q w.r.t. this centroid)
     std::vector<float> LUT; LUT.reserve((size_t)ivf.pq.M * ivf.pq.s);
 
     std::vector<std::pair<float,int>> cand;
     for (int c : probes) {
-        // residual του q: rq = q - centroid[c]
-        // Χτίσε LUT για αυτό το residual
-        // (Αν θες βελτιστοποίηση, μπορείς να υπολογίσεις rq μόνο μία φορά per subspace)
+        // residual of q: rq = q - centroid[c]
+        // Build LUT for this residual
+        // (For optimization, you could compute rq once per subspace)
         std::vector<float> rq((size_t)base.d, 0.0f);
         const float* cc = ivf.centroids.row(c);
         for (int j = 0; j < base.d; ++j) rq[j] = q[j] - cc[j];
 
         build_LUT(ivf.pq, rq.data(), LUT);
 
-        // διάβασε τα codes της inverted list c: packed M bytes ανά vector
+        // Read the codes of inverted list c: packed M bytes per vector
         const auto& ids_c   = ivf.ids[c];
         const auto& codes_c = ivf.codes[c];
         const size_t stride = (size_t)ivf.pq.M;
 
         for (size_t k = 0; k < ids_c.size(); ++k) {
             const uint8_t* code = codes_c.data() + k * stride;
-            // adc distance
+            // ADC distance
             float d = 0.0f;
             for (int si = 0; si < ivf.pq.M; ++si) {
                 int h = (int)code[si];

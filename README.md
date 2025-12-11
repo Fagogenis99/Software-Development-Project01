@@ -28,7 +28,7 @@
 Datasets:
 
 - **MNIST**
-- **SIFT1M**
+- **SIFT**
 
 ---
 
@@ -74,8 +74,8 @@ MNIST — IVFPQ
 ./search -d data/train-images.idx3-ubyte -q data/t10k-images.idx3-ubyte -type mnist \
 -ivfpq -M 16 -nbits 8 -N 1 -R 2000 -range false
 
-SIFT Dataset
-./search -d data/sift/sift_base.fvecs -q data/sift/sift_query.fvecs -type sift \
+SIFT Dataset (has some errors)
+./search -d data/sift_base.fvecs -q data/sift_query.fvecs -type sift \
 -lsh -k 4 -L 5 -w 4.0 -N 1 -R 2 -range false
 
 

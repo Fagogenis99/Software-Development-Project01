@@ -23,7 +23,7 @@ all: $(OUT)
 # Build rule
 $(OUT): $(SRC)
 	$(CXX) $(CXXFLAGS) $(SRC) -o $(OUT) $(LDFLAGS)
-	@echo "✅ Build complete: ./$(OUT)"
+	@echo "Build complete: ./$(OUT)"
 
 # Run examples
 run-lsh:

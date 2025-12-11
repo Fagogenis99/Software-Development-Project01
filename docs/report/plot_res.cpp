@@ -15,7 +15,7 @@ void plotWithGnuplot(const std::string& csv, const std::string& title, const std
     gp.close();
 
     system("gnuplot docs/report/plot_commands.gp");
-    std::cout << "✅ Plot saved to " << output << "\n";
+    std::cout << " Plot saved to " << output << "\n";
 }
 
 int main() {
